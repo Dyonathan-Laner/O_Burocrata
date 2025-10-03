@@ -19,7 +19,7 @@ public class Norma extends DocumentoAdministrativo {
         return numero;
     }
 
-    public boolean isValido() {
+    public boolean getValido() {
         return valido;
     }
 

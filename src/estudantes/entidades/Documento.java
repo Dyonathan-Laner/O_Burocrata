@@ -1,5 +1,6 @@
 package estudantes.entidades;
 
+import java.util.Objects;
 import professor.entidades.CodigoCurso;
 
 /**
@@ -30,6 +31,18 @@ public abstract class Documento {
 
     public int getPaginas() {
         return paginas;
+    }
+    @Override
+    public boolean equals(Object obj){
+        if(obj == null || getClass() != obj.getClass()){return false;}
+        
+        if(this == obj){return true;}
+        
+        Documento doc = (Documento)obj;
+        
+        return Objects.equals(this.criador, doc.criador) 
+                && Objects.equals(this.codigoCurso, doc.codigoCurso)
+                && this.paginas == doc.paginas;
     }
     
 }

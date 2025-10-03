@@ -65,13 +65,41 @@ public class Burocrata {
      * @see professor.entidades.Universidade#devolverDocumentoParaMonteDoCurso(estudantes.entidades.Documento, professor.entidades.CodigoCurso) 
      */
     public void trabalhar(){
+        /**Pega todos os processos da mesa */
+        Processo[] processos = mesa.getProcessos();
+        
+        for (Processo processo : processos) {
+            if (processo == null) continue;
+            
+            /**Tenta pegar um documento aleatório de cada monte de curso */
+            for (CodigoCurso codigo : CodigoCurso.values()) {
+                Documento[] documentosDoMonte = universidade.pegarCopiaDoMonteDoCurso(codigo);
+                
+                if (documentosDoMonte.length > 0) {
+                    /**Pega o primeiro documento do monte */
+                    Documento doc = documentosDoMonte[0];
+                    
+                    /**Remove do monte do curso */
+                    boolean removido = universidade.removerDocumentoDoMonteDoCurso(doc, codigo);
+                    if (removido) {
+                        /**Adiciona ao processo */
+                        processo.adicionarDocumento(doc);
+                    }
+                }
+            }
+            
+            /**Despacha o processo para a secretaria */
+            universidade.despachar(processo);
+        }
         
     }
     
+     /** Aumenta um pouco o estresse do burocrata */
     public void estressar() {
         estresse += 1;
     }
     
+    /** Aumenta bastante o estresse do burocrata */
     public void estressarMuito() {
         estresse += 10;
     }
