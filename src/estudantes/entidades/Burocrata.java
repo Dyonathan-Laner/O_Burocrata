@@ -31,6 +31,18 @@ public class Burocrata {
         this.universidade = u;
     }
     
+    public void getEstresse() {
+        return estresse;
+    }
+    
+    public void estressar() {
+        estresse += 1;
+    }
+    
+    public void estressarMuito() {
+        estresse += 5;
+    }
+    
     /**
      * Executa a lógica de criação e despacho dos processos.
      * <br><br>
