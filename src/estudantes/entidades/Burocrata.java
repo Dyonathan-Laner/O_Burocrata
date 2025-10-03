@@ -26,22 +26,16 @@ public class Burocrata {
      * @param m mesa com os processos
      * @param u universidade com os montes dos cursos e a secretaria
      */
-    public Burocrata(Mesa m, Universidade u){
-        this.mesa = m;
-        this.universidade = u;
+    public Burocrata(Mesa mesa, Universidade universidade){
+        this.mesa = mesa;
+        this.universidade = universidade;
     }
     
-    public void getEstresse() {
+    public int getEstresse() {
         return estresse;
     }
     
-    public void estressar() {
-        estresse += 1;
-    }
     
-    public void estressarMuito() {
-        estresse += 5;
-    }
     
     /**
      * Executa a lógica de criação e despacho dos processos.
@@ -72,5 +66,13 @@ public class Burocrata {
      */
     public void trabalhar(){
         
+    }
+    
+    public void estressar() {
+        estresse += 1;
+    }
+    
+    public void estressarMuito() {
+        estresse += 10;
     }
 }
