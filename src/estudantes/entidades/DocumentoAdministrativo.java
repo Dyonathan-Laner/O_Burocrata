@@ -1,13 +1,12 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package estudantes.entidades;
 
-/**
- *
- * @author Dyonathan
- */
-public class DocumentoAdministrativo {
+import professor.entidades.CodigoCurso;
+
+public class DocumentoAdministrativo extends Documento {
+    
+    public DocumentoAdministrativo(String criador, CodigoCurso codigoCurso, int paginas){
+        super(criador, codigoCurso, paginas);
+    }
+    
     
 }
