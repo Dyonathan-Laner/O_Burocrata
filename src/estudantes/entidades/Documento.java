@@ -37,12 +37,12 @@ public abstract class Documento {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null || getClass() != obj.getClass()) {
-            return false;
-        }
-
         if (this == obj) {
             return true;
+        }
+        
+        if (obj == null || !(obj instanceof Documento)) {
+            return false;
         }
 
         Documento doc = (Documento) obj;
