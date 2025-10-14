@@ -41,7 +41,7 @@ public abstract class Documento {
             return true;
         }
         
-        if (obj == null || !(obj instanceof Documento)) {
+        if (obj == null || this.getClass() != obj.getClass()) {
             return false;
         }
 
@@ -54,10 +54,9 @@ public abstract class Documento {
     
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 7 * hash + Objects.hashCode(this.criador);
-        hash = 7 * hash + Objects.hashCode(this.codigoCurso);
-        hash = 7 * hash + this.paginas;
+        int hash = Objects.hashCode(this.criador);
+        hash += Objects.hashCode(this.codigoCurso);
+        hash += this.paginas;
         return hash;
     }
 

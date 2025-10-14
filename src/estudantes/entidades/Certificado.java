@@ -1,5 +1,6 @@
 package estudantes.entidades;
 
+import java.util.Objects;
 import professor.entidades.CodigoCurso;
 
 public class Certificado extends Registro {
@@ -13,5 +14,37 @@ public class Certificado extends Registro {
         return descricao;
     }
 
-    
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || this.getClass() != obj.getClass()) {
+            return false;
+        }
+
+        Certificado certi = (Certificado) obj;
+
+        return Objects.equals(super.getCriador(), certi.getCriador())
+                && Objects.equals(super.getCodigoCurso(), certi.getCodigoCurso())
+                && super.getPaginas() == certi.getPaginas()
+                && super.getAutenticacao() == certi.getAutenticacao()
+                && super.getMatricula() == certi.getMatricula()
+                && Objects.equals(super.getEstudante(), certi.getEstudante())
+                && Objects.equals(this.getDescricao(), certi.getDescricao());
+    }
+
+    @Override
+    public int hashCode() {
+        
+        int hash = Objects.hashCode(super.getCriador());
+        hash += Objects.hashCode(super.getCodigoCurso());
+        hash += super.getPaginas();
+        hash += (int)super.getAutenticacao() / 100;
+        hash += Objects.hashCode(super.getEstudante());
+        hash += (int) super.getMatricula()/100;
+        hash += Objects.hashCode(this.getDescricao());
+        
+        return hash;
+    }
 }

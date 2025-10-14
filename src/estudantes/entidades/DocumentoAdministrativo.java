@@ -15,22 +15,25 @@ public class DocumentoAdministrativo extends Documento {
         if (this == obj) {
             return true;
         }
-        if (obj == null || !(obj instanceof DocumentoAdministrativo)) {
+        if (obj == null || this.getClass() != obj.getClass()) {
             return false;
         }
 
-        DocumentoAdministrativo docAdmin = (DocumentoAdministrativo) obj;
+        DocumentoAdministrativo docAd = (DocumentoAdministrativo) obj;
 
-        return super.equals(obj);
+        return Objects.equals(super.getCriador(), docAd.getCriador())
+                && Objects.equals(super.getCodigoCurso(), docAd.getCodigoCurso())
+                && super.getPaginas() == docAd.getPaginas();
+                
     }
 
     @Override
     public int hashCode() {
-        int hash = 7;
         
-        hash = 7 * hash + Objects.hashCode(super.getCriador());
-        hash = 7 * hash + Objects.hashCode(super.getCodigoCurso());
-        hash = 7 * hash + super.getPaginas();
+        int hash = Objects.hashCode(super.getCriador());
+        hash += Objects.hashCode(super.getCodigoCurso());
+        hash += super.getPaginas();
+        
         return hash;
     }
 }

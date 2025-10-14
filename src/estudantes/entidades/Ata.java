@@ -34,27 +34,29 @@ public class Ata extends Documento {
         if (this == obj) {
             return true;
         }
-        if (obj == null || !(obj instanceof Ata) || !super.equals(obj)) {
+        if (obj == null || this.getClass() != obj.getClass()) {
             return false;
         }
 
         Ata ata = (Ata) obj;
 
-        return this.numero == ata.numero
+        return Objects.equals(super.getCriador(), ata.getCriador())
+                && Objects.equals(super.getCodigoCurso(), ata.getCodigoCurso())
+                && super.getPaginas() == ata.getPaginas()
+                && this.numero == ata.numero
                 && Objects.equals(this.texto, ata.texto)
                 && Objects.equals(this.presentes, ata.presentes);
     }
 
     @Override
     public int hashCode() {
-        int hash = 7;
         
-        hash = 7 * hash + Objects.hashCode(super.getCriador());
-        hash = 7 * hash + Objects.hashCode(super.getCodigoCurso());
-        hash = 7 * hash + super.getPaginas();
-        hash = 7 * hash + this.numero;
-        hash = 7 * hash + Objects.hashCode(this.texto);
-        hash = 7 * hash + Arrays.deepHashCode(this.presentes);
+        int hash = Objects.hashCode(super.getCriador());
+        hash += Objects.hashCode(super.getCodigoCurso());
+        hash += super.getPaginas();
+        hash += this.numero;
+        hash += Objects.hashCode(this.texto);
+        hash += Arrays.deepHashCode(this.presentes);
         
         return hash;
     }

@@ -20,23 +20,25 @@ public class DocumentoAcademico extends Documento {
         if (this == obj) {
             return true;
         }
-        if (obj == null || !(obj instanceof DocumentoAcademico) || !super.equals(obj)) {
+        if (obj == null || this.getClass() != obj.getClass()) {
             return false;
         }
 
         DocumentoAcademico docAca = (DocumentoAcademico) obj;
 
-        return this.autenticacao == docAca.autenticacao;
+        return Objects.equals(super.getCriador(), docAca.getCriador())
+                && Objects.equals(super.getCodigoCurso(), docAca.getCodigoCurso())
+                && super.getPaginas() == docAca.getPaginas()
+                && this.autenticacao == docAca.autenticacao;
     }
 
     @Override
     public int hashCode() {
-        int hash = 7;
         
-        hash = 7 * hash + Objects.hashCode(super.getCriador());
-        hash = 7 * hash + Objects.hashCode(super.getCodigoCurso());
-        hash = 7 * hash + super.getPaginas();
-        hash = 7 * hash + (int)this.autenticacao;
+        int hash = Objects.hashCode(super.getCriador());
+        hash += Objects.hashCode(super.getCodigoCurso());
+        hash += super.getPaginas();
+        hash += (int)this.autenticacao / 100;
         
         return hash;
     }
