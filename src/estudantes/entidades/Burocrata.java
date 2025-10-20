@@ -5,48 +5,47 @@ import professor.entidades.*;
 /**
  * Classe que traz a lógica do algoritmo de organização e despacho de processos.
  * <br><br>
- * Você pode incluir novos atributos e métodos nessa classe para criar
- * lógicas mais complexas para o gerenciamento da organização e despacho de 
- * processos, mas esses <strong>atributos e métodos devem ser todos 
- * privados</strong> e eles não serão invocados diretamente pelo simulador.
+ * Você pode incluir novos atributos e métodos nessa classe para criar lógicas
+ * mais complexas para o gerenciamento da organização e despacho de processos,
+ * mas esses <strong>atributos e métodos devem ser todos privados</strong> e
+ * eles não serão invocados diretamente pelo simulador.
  * <br><br>
  * Os únicos métodos públicos devem ser: getEstresse, trabalhar, estressar e
  * estressarMuito.
- * 
+ *
  * @author coloque os nomes dos autores aqui
  */
 public class Burocrata {
+
     private int estresse = 0;
     private Mesa mesa;
     private Universidade universidade;
-    
+
     /**
      * Construtor de Burocrata.
-     * 
+     *
      * @param m mesa com os processos
      * @param u universidade com os montes dos cursos e a secretaria
      */
-    public Burocrata(Mesa mesa, Universidade universidade){
+    public Burocrata(Mesa mesa, Universidade universidade) {
         this.mesa = mesa;
         this.universidade = universidade;
     }
-    
+
     public int getEstresse() {
         return estresse;
     }
-    
-    
-    
+
     /**
      * Executa a lógica de criação e despacho dos processos.
      * <br><br>
-     * Esse método é o único método de controle invocado durante a simulação 
-     * da universidade.
+     * Esse método é o único método de controle invocado durante a simulação da
+     * universidade.
      * <br><br>
-     * Aqui podem ser feitas todas as verificações sobre os documentos nos 
-     * montes dos cursos e dos processos abertos na mesa do Burocrata. A partir 
-     * dessas informações, você pode colocar documentos nos processos abertos
-     * e despachar os processos para a secretaria acadêmica.
+     * Aqui podem ser feitas todas as verificações sobre os documentos nos
+     * montes dos cursos e dos processos abertos na mesa do Burocrata. A partir
+     * dessas informações, você pode colocar documentos nos processos abertos e
+     * despachar os processos para a secretaria acadêmica.
      * <br><br>
      * Cuidado com a complexidade do seu algoritmo, porque se ele demorar muito
      * serão criados menos documentos na sua execução e sua produtividade geral
@@ -59,48 +58,189 @@ public class Burocrata {
      * que o método trabalhar terminar de executar, ou seja, você deve devolver
      * para os montes dos cursos todos os documentos que você removeu dos montes
      * dos cursos.
-     * 
+     *
      * @see professor.entidades.Universidade#despachar(Processo)
-     * @see professor.entidades.Universidade#removerDocumentoDoMonteDoCurso(estudantes.entidades.Documento, professor.entidades.CodigoCurso)
-     * @see professor.entidades.Universidade#devolverDocumentoParaMonteDoCurso(estudantes.entidades.Documento, professor.entidades.CodigoCurso) 
+     * @see
+     * professor.entidades.Universidade#removerDocumentoDoMonteDoCurso(estudantes.entidades.Documento,
+     * professor.entidades.CodigoCurso)
+     * @see
+     * professor.entidades.Universidade#devolverDocumentoParaMonteDoCurso(estudantes.entidades.Documento,
+     * professor.entidades.CodigoCurso)
      */
-    public void trabalhar(){
-        /**Pega todos os processos da mesa */
+    public void trabalhar() {
+        /**
+         * Pega todos os processos da mesa
+         */
         Processo[] processos = mesa.getProcessos();
-        
+
         for (Processo processo : processos) {
-            if (processo == null) continue;
-            
-            /**Tenta pegar um documento aleatório de cada monte de curso */
+            if (processo == null) {
+                continue;
+            }
+
+            /**
+             * Tenta pegar um documento aleatório de cada monte de curso
+             */
             for (CodigoCurso codigo : CodigoCurso.values()) {
+
                 Documento[] documentosDoMonte = universidade.pegarCopiaDoMonteDoCurso(codigo);
-                
-                if (documentosDoMonte.length > 0) {
-                    /**Pega o primeiro documento do monte */
-                    Documento doc = documentosDoMonte[0];
-                    
-                    /**Remove do monte do curso */
-                    boolean removido = universidade.removerDocumentoDoMonteDoCurso(doc, codigo);
-                    if (removido) {
-                        /**Adiciona ao processo */
-                        processo.adicionarDocumento(doc);
+
+                for (Documento doc : documentosDoMonte) {
+
+                    int numPaginasAtuais = 0;
+                    for (Documento document : processo.pegarCopiaDoProcesso()) {
+                        numPaginasAtuais += document.getPaginas();
                     }
+
+                    if (numPaginasAtuais + doc.getPaginas() <= 250) {
+
+                        if (!teraGraduacaoEPos(processo, doc)) {
+                            boolean removido = universidade.removerDocumentoDoMonteDoCurso(doc, codigo);
+                            if (removido) {
+                                /**
+                                 * Adiciona ao processo
+                                 */
+                                processo.adicionarDocumento(doc);
+                            }
+
+                        }
+
+                    }
+
                 }
             }
-            
-            /**Despacha o processo para a secretaria */
+
+            /**
+             * Despacha o processo para a secretaria
+             */
             universidade.despachar(processo);
         }
-        
+
     }
-    
-     /** Aumenta um pouco o estresse do burocrata */
+
+    /**
+     * Aumenta um pouco o estresse do burocrata
+     */
     public void estressar() {
         estresse += 1;
     }
-    
-    /** Aumenta bastante o estresse do burocrata */
+
+    /**
+     * Aumenta bastante o estresse do burocrata
+     */
     public void estressarMuito() {
         estresse += 10;
     }
+
+    private static boolean contemGraduacao(Processo processo) {
+        for (Documento doc : processo.pegarCopiaDoProcesso()) {
+            /**
+             * Verifica se o Codigo do curso não é de uma Pós-graduação
+             */
+            if (!doc.getCodigoCurso().equals(CodigoCurso.POS_GRADUACAO_ENGENHARIA_SOFTWARE)
+                    && !doc.getCodigoCurso().equals(CodigoCurso.POS_GRADUACAO_ENGENHARIA_ELETRICA)
+                    && !doc.getCodigoCurso().equals(CodigoCurso.POS_GRADUACAO_ENGENHARIA)) {
+                /**
+                 * se não for nenhuma Pós-graduação, então é uma Graduação
+                 */
+                return true;
+            }
+        }
+        return false;
+
+    }
+
+    private static boolean contemPosGraduacao(Processo processo) {
+        for (Documento doc : processo.pegarCopiaDoProcesso()) {
+            /**
+             * Verifica se o Codigo do curso é de uma Pós-graduação
+             */
+            if (doc.getCodigoCurso().equals(CodigoCurso.POS_GRADUACAO_ENGENHARIA_SOFTWARE)
+                    || doc.getCodigoCurso().equals(CodigoCurso.POS_GRADUACAO_ENGENHARIA_ELETRICA)
+                    || doc.getCodigoCurso().equals(CodigoCurso.POS_GRADUACAO_ENGENHARIA)) {
+
+                return true;
+            }
+        }
+        return false;
+
+    }
+
+    private static boolean isGraduacao(Documento doc) {
+        /**
+         * Verifica se o Codigo do curso não é de uma Pós-graduação
+         */
+        if (!doc.getCodigoCurso().equals(CodigoCurso.POS_GRADUACAO_ENGENHARIA_SOFTWARE)
+                && !doc.getCodigoCurso().equals(CodigoCurso.POS_GRADUACAO_ENGENHARIA_ELETRICA)
+                && !doc.getCodigoCurso().equals(CodigoCurso.POS_GRADUACAO_ENGENHARIA)) {
+            /**
+             * se não for nenhuma Pós-graduação, então é uma Graduação
+             */
+            return true;
+        }
+        return false;
+    }
+
+    private static boolean isPosGraduacao(Documento doc) {
+        /**
+         * Verifica se o Codigo do curso é de uma Pós-graduação
+         */
+        if (doc.getCodigoCurso().equals(CodigoCurso.POS_GRADUACAO_ENGENHARIA_SOFTWARE)
+                || doc.getCodigoCurso().equals(CodigoCurso.POS_GRADUACAO_ENGENHARIA_ELETRICA)
+                || doc.getCodigoCurso().equals(CodigoCurso.POS_GRADUACAO_ENGENHARIA)) {
+
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * retornara true se
+     */
+    private static boolean teraGraduacaoEPos(Processo processo, Documento document) {
+        boolean temGraduacao = false;
+        boolean temPos = false;
+        
+        /**
+         * Verifica os Documentos que já estão no processo
+         */
+        for (Documento doc : processo.pegarCopiaDoProcesso()) {
+            if (doc.getCodigoCurso().equals(CodigoCurso.POS_GRADUACAO_ENGENHARIA_SOFTWARE)
+                    || doc.getCodigoCurso().equals(CodigoCurso.POS_GRADUACAO_ENGENHARIA_ELETRICA)
+                    || doc.getCodigoCurso().equals(CodigoCurso.POS_GRADUACAO_ENGENHARIA)) {
+
+                /**
+                 * Indica que esse processo tem um documento de Pós-Graduação
+                 */
+                temPos = true;
+            } else {
+                /**
+                 * Indica que esse processo tem um documento de Graduação
+                 */
+                temGraduacao = true;
+            }
+
+        }
+        if (document.getCodigoCurso().equals(CodigoCurso.POS_GRADUACAO_ENGENHARIA_SOFTWARE)
+                    || document.getCodigoCurso().equals(CodigoCurso.POS_GRADUACAO_ENGENHARIA_ELETRICA)
+                    || document.getCodigoCurso().equals(CodigoCurso.POS_GRADUACAO_ENGENHARIA)) {
+
+                /**
+                 * Indica que esse Documento é de Pós-Graduação
+                 */
+                temPos = true;
+            } else {
+                /**
+                 * Indica que esse Documento é de Graduação
+                 */
+                temGraduacao = true;
+            }
+        
+        /**
+         * Retorna true se o processo, for ter um Documento de Graduação e um de
+         * pós-graduação ao mesmo tempo
+         */
+        return temGraduacao && temPos;
+    }
+
 }
