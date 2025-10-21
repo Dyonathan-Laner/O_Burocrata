@@ -76,6 +76,8 @@ public class Burocrata {
             if (processo == null) {
                 continue;
             }
+            
+            boolean processoDespachado = false;
 
             /**
              * Tenta pegar um documento aleatório de cada monte de curso
@@ -102,15 +104,21 @@ public class Burocrata {
                                     if (atestadoDeMesmaCategoria(processo, doc)) {
 
                                         if (validarPortariaEEdital(processo, doc)) {
-
+                                            
                                             if (validarDiploma(processo, doc)) {
 
                                                 if (validarDestinatarios(processo, doc)) {
                                                 boolean removido = universidade.removerDocumentoDoMonteDoCurso(doc, codigo);
                                                 if (removido) {
                                                     processo.adicionarDocumento(doc);
-
+                                                    
+                                                    if(contemApenasSubstancialValido(processo)){
+                                                        universidade.despachar(processo);
+                                                        processoDespachado = true;
+                                                        break;
+                                                    }
                                                 }
+                                                
                                                 }
                                             }
                                         }
@@ -124,11 +132,12 @@ public class Burocrata {
 
                 }
             }
-
+            if(!processoDespachado){
             /**
              * Despacha o processo para a secretaria
              */
             universidade.despachar(processo);
+            }
         }
 
     }
@@ -314,5 +323,20 @@ public class Burocrata {
         }
         return true;
 
+    }
+    
+    private static boolean contemApenasSubstancialValido(Processo processo){
+        Documento[] docs = processo.pegarCopiaDoProcesso();
+        if(docs.length == 1){
+            Documento doc = docs[0];
+            if((doc instanceof Norma) && doc.getClass() != Norma.class){
+                Norma norma = (Norma)doc;
+                if(norma.getValido()){
+                    return true;
+                }
+            }
+        }
+        return false;
+        
     }
 }
