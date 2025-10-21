@@ -31,7 +31,7 @@ public class Burocrata {
         this.mesa = mesa;
         this.universidade = universidade;
     }
-
+    /** Retorna o nível de estresse do burocrata. */
     public int getEstresse() {
         return estresse;
     }
@@ -205,7 +205,7 @@ public class Burocrata {
          */
         return temGraduacao && temPos;
     }
-
+    /** Verifica se o processo contém apenas atas */
     private static boolean contemApenasAta(Processo processo) {
         for (Documento doc : processo.pegarCopiaDoProcesso()) {
             if (doc.getClass() != Ata.class) {
@@ -214,7 +214,7 @@ public class Burocrata {
         }
         return true;
     }
-
+    /** Verifica se há documentos administrativos e acadêmicos juntos */
     private static boolean contemAdministrativoEAcademico(Processo processo, Documento documento) {
         boolean temAdministrativo = false;
         boolean temAcademico = false;
@@ -233,7 +233,8 @@ public class Burocrata {
         }
         return temAcademico && temAdministrativo;
     }
-
+    
+    /** Verifica se os atestados têm a mesma categoria */
     private static boolean atestadoDeMesmaCategoria(Processo processo, Documento documento) {
         if (documento.getClass() == Atestado.class) {
             Atestado ate1 = (Atestado) documento;
@@ -249,7 +250,8 @@ public class Burocrata {
         }
         return true;
     }
-
+    
+    /** Verifica se o diploma é válido no processo */
     private static boolean validarDiploma(Processo processo, Documento documento) {
         if (documento.getClass() == Diploma.class) {
             for (Documento doc : processo.pegarCopiaDoProcesso()) {
@@ -260,7 +262,8 @@ public class Burocrata {
         }
         return true;
     }
-
+    
+    /** Verifica se portarias e editais são válidos */
     private static boolean validarPortariaEEdital(Processo processo, Documento doc) {
         if ((doc instanceof Norma) && doc.getClass() != Norma.class) {
             Norma norma = (Norma) doc;
@@ -273,7 +276,7 @@ public class Burocrata {
         }
         return true;
     }
-
+    /** Verifica se os destinatários de circulares e ofícios são compatíveis */
     private static boolean validarDestinatarios(Processo processo, Documento documento) {
         if ((documento instanceof Deliberacao) && documento.getClass() != Deliberacao.class) {
             String[] dest;
@@ -325,6 +328,7 @@ public class Burocrata {
 
     }
     
+    /** Verifica se o processo contém apenas um documento substancial e válido */
     private static boolean contemApenasSubstancialValido(Processo processo){
         Documento[] docs = processo.pegarCopiaDoProcesso();
         if(docs.length == 1){

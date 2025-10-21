@@ -4,31 +4,42 @@ import java.util.Arrays;
 import java.util.Objects;
 import professor.entidades.CodigoCurso;
 
+/**
+ * Representa uma ata.
+ */
 public class Ata extends Documento {
-
+    
+    /** Número da ata. */
     private int numero;
+    
+    /** Texto da ata. */   
     private String texto;
+    
+    /** Lista de presentes. */
     private String[] presentes;
 
+     /**
+     * Cria uma nova ata.
+     */
     public Ata(String criador, CodigoCurso codigoCurso, int paginas, int numero, String texto, String[] presentes) {
         super(criador, codigoCurso, paginas);
         this.numero = numero;
         this.texto = texto;
         this.presentes = presentes;
     }
-
+    /** @return número da ata */
     public int getNumero() {
         return numero;
     }
-
+     /** @return texto da ata */
     public String getTexto() {
         return texto;
     }
-
+    /** @return presentes da ata */
     public String[] getPresentes() {
         return presentes;
     }
-
+    /** Compara se duas atas são iguais. */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -48,6 +59,7 @@ public class Ata extends Documento {
                 && Objects.equals(this.presentes, ata.presentes);
     }
 
+    /** Gera um hash code para a ata. */
     @Override
     public int hashCode() {
         
