@@ -94,13 +94,18 @@ public class Burocrata {
 
                     if (numPaginasAtuais + doc.getPaginas() <= 250) {
 
-                        if (!teraGraduacaoEPos(processo, doc)) {
-                            boolean removido = universidade.removerDocumentoDoMonteDoCurso(doc, codigo);
-                            if (removido) {
-                                /**
-                                 * Adiciona ao processo
-                                 */
-                                processo.adicionarDocumento(doc);
+                        if (!contemGraduacaoEPos(processo, doc)) {
+
+                            if (!(doc.getClass() == Ata.class && contemApenasAta(processo))) {
+                                
+                                if(!contemAdministrativoEAcademico(processo, doc)){
+                                    boolean removido = universidade.removerDocumentoDoMonteDoCurso(doc, codigo);
+                                    if (removido) {
+                                        processo.adicionarDocumento(doc);
+
+                                    }
+                                }
+
                             }
 
                         }
@@ -195,12 +200,13 @@ public class Burocrata {
     }
 
     /**
-     * retornara true se
+     * Retorna false se Caso o Documento for adicionado no Processo, ele terá
+     * Graduação junto com pós
      */
-    private static boolean teraGraduacaoEPos(Processo processo, Documento document) {
+    private static boolean contemGraduacaoEPos(Processo processo, Documento documento) {
         boolean temGraduacao = false;
         boolean temPos = false;
-        
+
         /**
          * Verifica os Documentos que já estão no processo
          */
@@ -221,21 +227,21 @@ public class Burocrata {
             }
 
         }
-        if (document.getCodigoCurso().equals(CodigoCurso.POS_GRADUACAO_ENGENHARIA_SOFTWARE)
-                    || document.getCodigoCurso().equals(CodigoCurso.POS_GRADUACAO_ENGENHARIA_ELETRICA)
-                    || document.getCodigoCurso().equals(CodigoCurso.POS_GRADUACAO_ENGENHARIA)) {
+        if (documento.getCodigoCurso().equals(CodigoCurso.POS_GRADUACAO_ENGENHARIA_SOFTWARE)
+                || documento.getCodigoCurso().equals(CodigoCurso.POS_GRADUACAO_ENGENHARIA_ELETRICA)
+                || documento.getCodigoCurso().equals(CodigoCurso.POS_GRADUACAO_ENGENHARIA)) {
 
-                /**
-                 * Indica que esse Documento é de Pós-Graduação
-                 */
-                temPos = true;
-            } else {
-                /**
-                 * Indica que esse Documento é de Graduação
-                 */
-                temGraduacao = true;
-            }
-        
+            /**
+             * Indica que esse Documento é de Pós-Graduação
+             */
+            temPos = true;
+        } else {
+            /**
+             * Indica que esse Documento é de Graduação
+             */
+            temGraduacao = true;
+        }
+
         /**
          * Retorna true se o processo, for ter um Documento de Graduação e um de
          * pós-graduação ao mesmo tempo
@@ -243,4 +249,31 @@ public class Burocrata {
         return temGraduacao && temPos;
     }
 
+    private static boolean contemApenasAta(Processo processo) {
+        for (Documento doc : processo.pegarCopiaDoProcesso()) {
+            if (doc.getClass() != Ata.class) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static boolean contemAdministrativoEAcademico(Processo processo, Documento documento) {
+        boolean temAdministrativo = false;
+        boolean temAcademico = false;
+
+        for (Documento doc : processo.pegarCopiaDoProcesso()) {
+            if (doc instanceof DocumentoAcademico) {
+                temAcademico = true;
+            } else if (doc instanceof DocumentoAdministrativo) {
+                temAdministrativo = true;
+            }
+        }
+        if (documento instanceof DocumentoAcademico) {
+            temAcademico = true;
+        } else if (documento instanceof DocumentoAdministrativo) {
+            temAdministrativo = true;
+        }
+        return temAcademico && temAdministrativo;
+    }
 }
