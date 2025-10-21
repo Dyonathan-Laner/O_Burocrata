@@ -72,7 +72,6 @@ public class Burocrata {
          * Pega todos os processos da mesa
          */
         Processo[] processos = mesa.getProcessos();
-
         for (Processo processo : processos) {
             if (processo == null) {
                 continue;
@@ -97,15 +96,26 @@ public class Burocrata {
                         if (!contemGraduacaoEPos(processo, doc)) {
 
                             if (!(doc.getClass() == Ata.class && contemApenasAta(processo))) {
-                                
-                                if(!contemAdministrativoEAcademico(processo, doc)){
-                                    boolean removido = universidade.removerDocumentoDoMonteDoCurso(doc, codigo);
-                                    if (removido) {
-                                        processo.adicionarDocumento(doc);
 
+                                if (!contemAdministrativoEAcademico(processo, doc)) {
+
+                                    if (atestadoDeMesmaCategoria(processo, doc)) {
+
+                                        if (validarPortariaEEdital(processo, doc)) {
+
+                                            if (validarDiploma(processo, doc)) {
+
+                                                if (validarDestinatarios(processo, doc)) {
+                                                boolean removido = universidade.removerDocumentoDoMonteDoCurso(doc, codigo);
+                                                if (removido) {
+                                                    processo.adicionarDocumento(doc);
+
+                                                }
+                                                }
+                                            }
+                                        }
                                     }
                                 }
-
                             }
 
                         }
@@ -275,5 +285,96 @@ public class Burocrata {
             temAdministrativo = true;
         }
         return temAcademico && temAdministrativo;
+    }
+
+    private static boolean atestadoDeMesmaCategoria(Processo processo, Documento documento) {
+        if (documento.getClass() == Atestado.class) {
+            Atestado ate1 = (Atestado) documento;
+            for (Documento doc : processo.pegarCopiaDoProcesso()) {
+                if (doc.getClass() == Atestado.class) {
+                    Atestado ate2 = (Atestado) doc;
+                    if (!(ate1.getCategoria().equals(ate2.getCategoria()))) {
+                        return false;
+                    }
+                }
+
+            }
+        }
+        return true;
+    }
+
+    private static boolean validarDiploma(Processo processo, Documento documento) {
+        if (documento.getClass() == Diploma.class) {
+            for (Documento doc : processo.pegarCopiaDoProcesso()) {
+                if (!(doc instanceof Certificado) && doc.getClass() != Ata.class) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private static boolean validarPortariaEEdital(Processo processo, Documento doc) {
+        if ((doc instanceof Norma) && doc.getClass() != Norma.class) {
+            Norma norma = (Norma) doc;
+            if (norma.getValido() && norma.getPaginas() >= 100) {
+                Documento[] docs = processo.pegarCopiaDoProcesso();
+                if (docs.length > 0) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private static boolean validarDestinatarios(Processo processo, Documento documento) {
+        if ((documento instanceof Deliberacao) && documento.getClass() != Deliberacao.class) {
+            String[] dest;
+            if (documento.getClass() == Circular.class) {
+                Circular circ = (Circular) documento;
+                dest = circ.getDestinatarios();
+            } else {
+                Oficio oficio = (Oficio) documento;
+                dest = new String[]{oficio.getDestinatario()};
+            }
+
+            for (Documento doc : processo.pegarCopiaDoProcesso()) {
+                if ((doc instanceof Deliberacao) && doc.getClass() != Deliberacao.class) {
+
+                    if (doc.getClass() == Circular.class) {
+                        Circular circ = (Circular) doc;
+                        boolean temIgual = false;
+
+                        for (String destPro : circ.getDestinatarios()) {
+                            for (String destDoc : dest) {
+                                if (destPro.equals(destDoc)) {
+                                    temIgual = true;
+                                }
+                            }
+                        }
+                        if (!temIgual) {
+                            
+                            return false;
+                        }
+
+                    } else {
+                        Oficio oficio = (Oficio) doc;
+                        boolean temIgual = false;
+                        for (String destDoc : dest) {
+                            if (destDoc.equals(oficio.getDestinatario())) {
+                                temIgual = true;
+                            }
+                        }
+                        if (!temIgual) {
+                           
+                            return false;
+                        }
+                    }
+
+                }
+            }
+        }
+        return true;
+
     }
 }
