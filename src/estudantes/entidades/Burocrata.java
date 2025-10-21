@@ -147,68 +147,6 @@ public class Burocrata {
         estresse += 10;
     }
 
-    private static boolean contemGraduacao(Processo processo) {
-        for (Documento doc : processo.pegarCopiaDoProcesso()) {
-            /**
-             * Verifica se o Codigo do curso não é de uma Pós-graduação
-             */
-            if (!doc.getCodigoCurso().equals(CodigoCurso.POS_GRADUACAO_ENGENHARIA_SOFTWARE)
-                    && !doc.getCodigoCurso().equals(CodigoCurso.POS_GRADUACAO_ENGENHARIA_ELETRICA)
-                    && !doc.getCodigoCurso().equals(CodigoCurso.POS_GRADUACAO_ENGENHARIA)) {
-                /**
-                 * se não for nenhuma Pós-graduação, então é uma Graduação
-                 */
-                return true;
-            }
-        }
-        return false;
-
-    }
-
-    private static boolean contemPosGraduacao(Processo processo) {
-        for (Documento doc : processo.pegarCopiaDoProcesso()) {
-            /**
-             * Verifica se o Codigo do curso é de uma Pós-graduação
-             */
-            if (doc.getCodigoCurso().equals(CodigoCurso.POS_GRADUACAO_ENGENHARIA_SOFTWARE)
-                    || doc.getCodigoCurso().equals(CodigoCurso.POS_GRADUACAO_ENGENHARIA_ELETRICA)
-                    || doc.getCodigoCurso().equals(CodigoCurso.POS_GRADUACAO_ENGENHARIA)) {
-
-                return true;
-            }
-        }
-        return false;
-
-    }
-
-    private static boolean isGraduacao(Documento doc) {
-        /**
-         * Verifica se o Codigo do curso não é de uma Pós-graduação
-         */
-        if (!doc.getCodigoCurso().equals(CodigoCurso.POS_GRADUACAO_ENGENHARIA_SOFTWARE)
-                && !doc.getCodigoCurso().equals(CodigoCurso.POS_GRADUACAO_ENGENHARIA_ELETRICA)
-                && !doc.getCodigoCurso().equals(CodigoCurso.POS_GRADUACAO_ENGENHARIA)) {
-            /**
-             * se não for nenhuma Pós-graduação, então é uma Graduação
-             */
-            return true;
-        }
-        return false;
-    }
-
-    private static boolean isPosGraduacao(Documento doc) {
-        /**
-         * Verifica se o Codigo do curso é de uma Pós-graduação
-         */
-        if (doc.getCodigoCurso().equals(CodigoCurso.POS_GRADUACAO_ENGENHARIA_SOFTWARE)
-                || doc.getCodigoCurso().equals(CodigoCurso.POS_GRADUACAO_ENGENHARIA_ELETRICA)
-                || doc.getCodigoCurso().equals(CodigoCurso.POS_GRADUACAO_ENGENHARIA)) {
-
-            return true;
-        }
-        return false;
-    }
-
     /**
      * Retorna false se Caso o Documento for adicionado no Processo, ele terá
      * Graduação junto com pós
