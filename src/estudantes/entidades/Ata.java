@@ -59,7 +59,7 @@ public class Ata extends Documento {
                 && Objects.equals(this.presentes, ata.presentes);
     }
 
-    /** Gera um hash code para a ata. */
+    /** Gera um hashCode para a ata. */
     @Override
     public int hashCode() {
         

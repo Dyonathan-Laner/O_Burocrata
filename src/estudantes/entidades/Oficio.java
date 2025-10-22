@@ -3,19 +3,42 @@ package estudantes.entidades;
 import java.util.Objects;
 import professor.entidades.CodigoCurso;
 
+/**
+ * Representa um ofício administrativo, contendo destinatário e texto.
+ * Estende a classe Deliberacao.
+ */
 public class Oficio extends Deliberacao {
-
+    /** Destinatário do ofício. */
     private String destinatario;
     
+    /**
+     * Construtor da classe Oficio.
+     *
+     * @param criador criador do ofício
+     * @param codigoCurso código do curso relacionado
+     * @param paginas número de páginas do ofício
+     * @param texto conteúdo do ofício
+     * @param destinatario destinatário do ofício
+     */
     public Oficio(String criador, CodigoCurso codigoCurso, int paginas, String texto, String destinatario){
         super(criador, codigoCurso, paginas, texto);
         this.destinatario = destinatario;
         
     }
+    /**
+     * Retorna o destinatário do ofício.
+     *
+     * @return destinatário
+     */
     public String getDestinatario(){
         return destinatario;
     }
-    
+    /**
+     * Compara este ofício com outro objeto para verificar se são iguais.
+     *
+     * @param obj objeto a ser comparado
+     * @return true se os objetos forem iguais, false caso contrário
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -34,7 +57,11 @@ public class Oficio extends Deliberacao {
                 && Objects.equals(this.getDestinatario(), ofi.getDestinatario());
                 
     }
-
+    /**
+     * Retorna o hashCode do ofício.
+     *
+     * @return valor hash do ofício
+     */
     @Override
     public int hashCode() {
         

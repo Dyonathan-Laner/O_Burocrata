@@ -4,18 +4,32 @@ import java.util.Arrays;
 import java.util.Objects;
 import professor.entidades.CodigoCurso;
 
+/**
+ * Representa uma circular, um tipo de deliberação enviada para vários destinatários.
+ */
 public class Circular extends Deliberacao {
+    /** Lista de destinatários da circular. */
     private String[] destinatarios;
     
+     /**
+     * Construtor da circular.
+     * 
+     * @param criador autor do documento
+     * @param codigoCurso código do curso relacionado
+     * @param paginas número de páginas do documento
+     * @param texto conteúdo do texto da circular
+     * @param destinatarios lista de destinatários
+     */
     public Circular(String criador, CodigoCurso codigoCurso, int paginas, String texto, String[] destinatarios){
         super(criador, codigoCurso, paginas, texto);
         this.destinatarios = destinatarios;   
     }
-    
+    /** Retorna os destinatários da circular. */
     public String[] getDestinatarios(){
         return destinatarios;
     }
     
+    /** Compara duas circulares verificando se possuem os mesmos dados. */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -34,7 +48,8 @@ public class Circular extends Deliberacao {
                 && Objects.equals(this.getDestinatarios(), circ.getDestinatarios());
                 
     }
-
+    
+    /** Gera um hashCode com base nos atributos da circular. */
     @Override
     public int hashCode() {
         

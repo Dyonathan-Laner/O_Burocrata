@@ -3,17 +3,34 @@ package estudantes.entidades;
 import java.util.Objects;
 import professor.entidades.CodigoCurso;
 
+/**
+* Representa um certificado emitido para um estudante, contendo informações
+* sobre autenticação, matrícula e descrição.
+*/
 public class Certificado extends Registro {
+    /** Descrição do certificado. */
     private String descricao;
     
+    /**
+     * Construtor do certificado.
+     * 
+     * @param criador autor do documento
+     * @param codigoCurso código do curso relacionado
+     * @param paginas número de páginas do documento
+     * @param autenticacao número de autenticação
+     * @param estudante nome do estudante
+     * @param matricula número de matrícula do estudante
+     * @param descricao descrição do certificado
+     */
     public Certificado(String criador, CodigoCurso codigoCurso, int paginas, long autenticacao, String estudante, long matricula, String descricao){
         super(criador, codigoCurso, paginas, autenticacao, estudante, matricula);
         this.descricao = descricao;
     }
+    /** Retorna a descrição do certificado. */
     public String getDescricao(){
         return descricao;
     }
-
+    /** Compara dois certificados verificando se possuem os mesmos dados. */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -33,7 +50,7 @@ public class Certificado extends Registro {
                 && Objects.equals(super.getEstudante(), certi.getEstudante())
                 && Objects.equals(this.getDescricao(), certi.getDescricao());
     }
-
+    /** Gera um hashCode com base nos atributos do certificado. */
     @Override
     public int hashCode() {
         

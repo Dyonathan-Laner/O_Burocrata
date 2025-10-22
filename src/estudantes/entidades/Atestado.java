@@ -49,7 +49,7 @@ public class Atestado extends Registro {
                 && Objects.equals(this.getDescricao(), ate.getDescricao())
                 && Objects.equals(this.getCategoria(), ate.getCategoria());
     }
-    /** Gera um hash code para o atestado. */
+    /** Gera um hashCode para o atestado. */
     @Override
     public int hashCode() {
         

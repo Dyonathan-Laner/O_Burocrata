@@ -68,89 +68,73 @@ public class Burocrata {
      * professor.entidades.CodigoCurso)
      */
     public void trabalhar() {
+    /**
+    * Pega todos os processos da mesa.
+    */
+    Processo[] processos = mesa.getProcessos();
+
+    for (Processo processo : processos) {
+        if (processo == null) continue;
+
+        boolean processoDespachado = false;
         /**
-         * Pega todos os processos da mesa
-         */
-        Processo[] processos = mesa.getProcessos();
-        for (Processo processo : processos) {
-            if (processo == null) {
-                continue;
-            }
-            
-            boolean processoDespachado = false;
+        * Tenta pegar um documento aleatório de cada monte de curso.
+        */
+        for (CodigoCurso codigo : CodigoCurso.values()) {
 
-            /**
-             * Tenta pegar um documento aleatório de cada monte de curso
-             */
-            for (CodigoCurso codigo : CodigoCurso.values()) {
+            Documento[] documentosDoMonte = universidade.pegarCopiaDoMonteDoCurso(codigo);
 
-                Documento[] documentosDoMonte = universidade.pegarCopiaDoMonteDoCurso(codigo);
+            for (Documento doc : documentosDoMonte) {
 
-                for (Documento doc : documentosDoMonte) {
-
-                    int numPaginasAtuais = 0;
-                    for (Documento document : processo.pegarCopiaDoProcesso()) {
-                        numPaginasAtuais += document.getPaginas();
-                    }
-
-                    if (numPaginasAtuais + doc.getPaginas() <= 250) {
-
-                        if (!contemGraduacaoEPos(processo, doc)) {
-
-                            if (!(doc.getClass() == Ata.class && contemApenasAta(processo))) {
-
-                                if (!contemAdministrativoEAcademico(processo, doc)) {
-
-                                    if (atestadoDeMesmaCategoria(processo, doc)) {
-
-                                        if (validarPortariaEEdital(processo, doc)) {
-                                            
-                                            if (validarDiploma(processo, doc)) {
-
-                                                if (validarDestinatarios(processo, doc)) {
-                                                boolean removido = universidade.removerDocumentoDoMonteDoCurso(doc, codigo);
-                                                if (removido) {
-                                                    processo.adicionarDocumento(doc);
-                                                    
-                                                    if(contemApenasSubstancialValido(processo)){
-                                                        universidade.despachar(processo);
-                                                        processoDespachado = true;
-                                                        break;
-                                                    }
-                                                }
-                                                
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-
-                        }
-
-                    }
-
+                int numPaginasAtuais = 0;
+                for (Documento document : processo.pegarCopiaDoProcesso()) {
+                    numPaginasAtuais += document.getPaginas();
                 }
-            }
-            if(!processoDespachado){
-            /**
-             * Despacha o processo para a secretaria
-             */
-            universidade.despachar(processo);
+                /**
+                * Valida se é possível adicionar o documento no processo.
+                */
+                if (numPaginasAtuais + doc.getPaginas() <= 250
+                        && !contemGraduacaoEPos(processo, doc)
+                        && !(doc.getClass() == Ata.class && contemApenasAta(processo))
+                        && !contemAdministrativoEAcademico(processo, doc)
+                        && atestadoDeMesmaCategoria(processo, doc)
+                        && validarPortariaEEdital(processo, doc)
+                        && validarDiploma(processo, doc)
+                        && validarDestinatarios(processo, doc)) {
+
+                    boolean removido = universidade.removerDocumentoDoMonteDoCurso(doc, codigo);
+
+                    if (removido) {
+                        processo.adicionarDocumento(doc);
+
+                        if (contemApenasSubstancialValido(processo)) {
+                            universidade.despachar(processo);
+                            processoDespachado = true;
+                            break;
+                        }
+                    }
+                }
             }
         }
 
+        /**
+        * Despacha o processo para a secretaria.
+        */
+        if (!processoDespachado) {
+            universidade.despachar(processo);
+        }
     }
+}
 
     /**
-     * Aumenta um pouco o estresse do burocrata
+     * Aumenta um pouco o estresse do burocrata.
      */
     public void estressar() {
         estresse += 1;
     }
 
     /**
-     * Aumenta bastante o estresse do burocrata
+     * Aumenta bastante o estresse do burocrata.
      */
     public void estressarMuito() {
         estresse += 10;
@@ -158,14 +142,14 @@ public class Burocrata {
 
     /**
      * Retorna false se Caso o Documento for adicionado no Processo, ele terá
-     * Graduação junto com pós
+     * Graduação junto com pós.
      */
     private static boolean contemGraduacaoEPos(Processo processo, Documento documento) {
         boolean temGraduacao = false;
         boolean temPos = false;
 
         /**
-         * Verifica os Documentos que já estão no processo
+         * Verifica os Documentos que já estão no processo.
          */
         for (Documento doc : processo.pegarCopiaDoProcesso()) {
             if (doc.getCodigoCurso().equals(CodigoCurso.POS_GRADUACAO_ENGENHARIA_SOFTWARE)
@@ -173,12 +157,12 @@ public class Burocrata {
                     || doc.getCodigoCurso().equals(CodigoCurso.POS_GRADUACAO_ENGENHARIA)) {
 
                 /**
-                 * Indica que esse processo tem um documento de Pós-Graduação
+                 * Indica que esse processo tem um documento de Pós-Graduação.
                  */
                 temPos = true;
             } else {
                 /**
-                 * Indica que esse processo tem um documento de Graduação
+                 * Indica que esse processo tem um documento de Graduação.
                  */
                 temGraduacao = true;
             }
@@ -189,23 +173,23 @@ public class Burocrata {
                 || documento.getCodigoCurso().equals(CodigoCurso.POS_GRADUACAO_ENGENHARIA)) {
 
             /**
-             * Indica que esse Documento é de Pós-Graduação
+             * Indica que esse Documento é de Pós-Graduação.
              */
             temPos = true;
         } else {
             /**
-             * Indica que esse Documento é de Graduação
+             * Indica que esse Documento é de Graduação.
              */
             temGraduacao = true;
         }
 
         /**
          * Retorna true se o processo, for ter um Documento de Graduação e um de
-         * pós-graduação ao mesmo tempo
+         * pós-graduação ao mesmo tempo.
          */
         return temGraduacao && temPos;
     }
-    /** Verifica se o processo contém apenas atas */
+    /** Verifica se o processo contém apenas atas. */
     private static boolean contemApenasAta(Processo processo) {
         for (Documento doc : processo.pegarCopiaDoProcesso()) {
             if (doc.getClass() != Ata.class) {
@@ -214,7 +198,7 @@ public class Burocrata {
         }
         return true;
     }
-    /** Verifica se há documentos administrativos e acadêmicos juntos */
+    /** Verifica se há documentos administrativos e acadêmicos juntos. */
     private static boolean contemAdministrativoEAcademico(Processo processo, Documento documento) {
         boolean temAdministrativo = false;
         boolean temAcademico = false;
@@ -234,7 +218,7 @@ public class Burocrata {
         return temAcademico && temAdministrativo;
     }
     
-    /** Verifica se os atestados têm a mesma categoria */
+    /** Verifica se os atestados têm a mesma categoria. */
     private static boolean atestadoDeMesmaCategoria(Processo processo, Documento documento) {
         if (documento.getClass() == Atestado.class) {
             Atestado ate1 = (Atestado) documento;
@@ -251,7 +235,7 @@ public class Burocrata {
         return true;
     }
     
-    /** Verifica se o diploma é válido no processo */
+    /** Verifica se o diploma é válido no processo. */
     private static boolean validarDiploma(Processo processo, Documento documento) {
         if (documento.getClass() == Diploma.class) {
             for (Documento doc : processo.pegarCopiaDoProcesso()) {
@@ -263,7 +247,7 @@ public class Burocrata {
         return true;
     }
     
-    /** Verifica se portarias e editais são válidos */
+    /** Verifica se portarias e editais são válidos. */
     private static boolean validarPortariaEEdital(Processo processo, Documento doc) {
         if ((doc instanceof Norma) && doc.getClass() != Norma.class) {
             Norma norma = (Norma) doc;
@@ -276,7 +260,7 @@ public class Burocrata {
         }
         return true;
     }
-    /** Verifica se os destinatários de circulares e ofícios são compatíveis */
+    /** Verifica se os destinatários de circulares e ofícios são compatíveis. */
     private static boolean validarDestinatarios(Processo processo, Documento documento) {
         if ((documento instanceof Deliberacao) && documento.getClass() != Deliberacao.class) {
             String[] dest;
@@ -328,7 +312,7 @@ public class Burocrata {
 
     }
     
-    /** Verifica se o processo contém apenas um documento substancial e válido */
+    /** Verifica se o processo contém apenas um documento substancial e válido. */
     private static boolean contemApenasSubstancialValido(Processo processo){
         Documento[] docs = processo.pegarCopiaDoProcesso();
         if(docs.length == 1){

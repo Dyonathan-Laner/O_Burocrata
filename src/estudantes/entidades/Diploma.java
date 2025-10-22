@@ -3,19 +3,47 @@ package estudantes.entidades;
 import java.util.Objects;
 import professor.entidades.CodigoCurso;
 
+/**
+ * Representa um diploma de um estudante, contendo informações de habilitação.
+ * Estende a classe Certificado.
+ */
 public class Diploma extends Certificado {
-
+    
+    /** Habilitação associada ao diploma. */
     private String habilitacao;
     
+    /**
+     * Construtor da classe Diploma.
+     *
+     * @param criador criador do documento
+     * @param codigoCurso código do curso relacionado
+     * @param paginas número de páginas do diploma
+     * @param autenticacao código de autenticação do diploma
+     * @param estudante nome do estudante
+     * @param matricula número de matrícula do estudante
+     * @param descricao descrição do diploma
+     * @param habilitacao habilitação correspondente ao diploma
+     */
     public Diploma(String criador, CodigoCurso codigoCurso, int paginas, long autenticacao, String estudante, long matricula, String descricao, String habilitacao){
         super(criador, codigoCurso, paginas, autenticacao, estudante, matricula, descricao);
         this.habilitacao = habilitacao;
     }
-
+    
+    /**
+     * Retorna a habilitação do diploma.
+     *
+     * @return habilitação do diploma
+     */
     public String getHabilitacao() {
         return habilitacao;
     }
     
+    /**
+     * Compara este diploma com outro objeto para verificar se são iguais.
+     *
+     * @param obj objeto a ser comparado
+     * @return true se os objetos forem iguais, false caso contrário
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -36,7 +64,12 @@ public class Diploma extends Certificado {
                 && Objects.equals(super.getDescricao(), dip.getDescricao())
                 && Objects.equals(this.getHabilitacao(), dip.getHabilitacao());
     }
-
+    
+    /**
+     * Retorna o hashCode do diploma.
+     *
+     * @return valor hash do diploma
+     */
     @Override
     public int hashCode() {
         

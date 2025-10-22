@@ -3,19 +3,41 @@ package estudantes.entidades;
 import java.util.Objects;
 import professor.entidades.CodigoCurso;
 
+/**
+ * Representa uma deliberação administrativa com um texto descritivo.
+ * Extende a classe DocumentoAdministrativo.
+ */
 public class Deliberacao extends DocumentoAdministrativo {
-
+    /** Texto da deliberação. */
     private String texto;
-
+    
+    /**
+     * Construtor da classe Deliberacao.
+     *
+     * @param criador criador do documento
+     * @param codigoCurso código do curso relacionado
+     * @param paginas número de páginas do documento
+     * @param texto conteúdo da deliberação
+     */
     public Deliberacao(String criador, CodigoCurso codigoCurso, int paginas, String texto) {
         super(criador, codigoCurso, paginas);
         this.texto = texto;
     }
     
+    /**
+     * Retorna o texto da deliberação.
+     *
+     * @return texto da deliberação
+     */
     public String getTexto(){
         return texto;
     }
-    
+    /**
+     * Compara esta deliberação com outro objeto para verificar se são iguais.
+     *
+     * @param obj objeto a ser comparado
+     * @return true se os objetos forem iguais, false caso contrário
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -33,7 +55,12 @@ public class Deliberacao extends DocumentoAdministrativo {
                 && Objects.equals(this.getTexto(), delib.getTexto());
                 
     }
-
+    
+    /**
+     * Retorna o hashCode da deliberação.
+     *
+     * @return valor hash da deliberação
+     */
     @Override
     public int hashCode() {
         
