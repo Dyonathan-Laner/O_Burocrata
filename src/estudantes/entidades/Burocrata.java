@@ -3,17 +3,8 @@ package estudantes.entidades;
 import professor.entidades.*;
 
 /**
- * Classe que traz a lógica do algoritmo de organização e despacho de processos.
- * <br><br>
- * Você pode incluir novos atributos e métodos nessa classe para criar lógicas
- * mais complexas para o gerenciamento da organização e despacho de processos,
- * mas esses <strong>atributos e métodos devem ser todos privados</strong> e
- * eles não serão invocados diretamente pelo simulador.
- * <br><br>
- * Os únicos métodos públicos devem ser: getEstresse, trabalhar, estressar e
- * estressarMuito.
- *
- * @author coloque os nomes dos autores aqui
+ * Classe que representa um Burocrata responsável por organizar e despachar processos
+ * na universidade. Gerencia estresse e valida documentos antes do despacho.
  */
 public class Burocrata {
 
@@ -37,35 +28,9 @@ public class Burocrata {
     }
 
     /**
-     * Executa a lógica de criação e despacho dos processos.
-     * <br><br>
-     * Esse método é o único método de controle invocado durante a simulação da
-     * universidade.
-     * <br><br>
-     * Aqui podem ser feitas todas as verificações sobre os documentos nos
-     * montes dos cursos e dos processos abertos na mesa do Burocrata. A partir
-     * dessas informações, você pode colocar documentos nos processos abertos e
-     * despachar os processos para a secretaria acadêmica.
-     * <br><br>
-     * Cuidado com a complexidade do seu algoritmo, porque se ele demorar muito
-     * serão criados menos documentos na sua execução e sua produtividade geral
-     * vai cair.
-     * <br><br>
-     * Esse método será chamado a cada 100 milissegundos pelo simulador da
-     * universidade.
-     * <br><br>
-     * <strong>O burocrata não pode manter documentos com ele</strong> depois
-     * que o método trabalhar terminar de executar, ou seja, você deve devolver
-     * para os montes dos cursos todos os documentos que você removeu dos montes
-     * dos cursos.
-     *
-     * @see professor.entidades.Universidade#despachar(Processo)
-     * @see
-     * professor.entidades.Universidade#removerDocumentoDoMonteDoCurso(estudantes.entidades.Documento,
-     * professor.entidades.CodigoCurso)
-     * @see
-     * professor.entidades.Universidade#devolverDocumentoParaMonteDoCurso(estudantes.entidades.Documento,
-     * professor.entidades.CodigoCurso)
+     * Executa a lógica de trabalho do burocrata:
+     * percorre todos os processos da mesa, valida e adiciona documentos,
+     * e despacha os processos para a secretaria.
      */
     public void trabalhar() {
     /**
@@ -149,8 +114,13 @@ public class Burocrata {
         boolean temPos = false;
 
         /**
-         * Verifica os Documentos que já estão no processo.
-         */
+        * Verifica se adicionar o documento ao processo causaria mistura de
+        * documentos de Graduação e Pós-Graduação.
+        *
+        * @param processo o processo que receberia o documento
+        * @param documento o documento a ser verificado
+        * @return (@Code true se haveria mistura de Graduação e Pós-Graduação, false caso contrário
+        */
         for (Documento doc : processo.pegarCopiaDoProcesso()) {
             if (doc.getCodigoCurso().equals(CodigoCurso.POS_GRADUACAO_ENGENHARIA_SOFTWARE)
                     || doc.getCodigoCurso().equals(CodigoCurso.POS_GRADUACAO_ENGENHARIA_ELETRICA)
@@ -189,7 +159,12 @@ public class Burocrata {
          */
         return temGraduacao && temPos;
     }
-    /** Verifica se o processo contém apenas atas. */
+    /**
+     * Verifica se o processo contém apenas documentos do tipo Ata.
+     *
+     * @param processo processo a ser verificado
+     * @return (@Code true se contém apenas Atas, (@Code false) caso contrário
+     */
     private static boolean contemApenasAta(Processo processo) {
         for (Documento doc : processo.pegarCopiaDoProcesso()) {
             if (doc.getClass() != Ata.class) {
@@ -198,7 +173,13 @@ public class Burocrata {
         }
         return true;
     }
-    /** Verifica se há documentos administrativos e acadêmicos juntos. */
+    /**
+     * Verifica se há mistura de documentos administrativos e acadêmicos.
+     *
+     * @param processo processo a ser verificado
+     * @param documento documento a ser adicionado
+     * @return (@Code true se houver mistura, (@Code false) caso contrário
+     */
     private static boolean contemAdministrativoEAcademico(Processo processo, Documento documento) {
         boolean temAdministrativo = false;
         boolean temAcademico = false;
@@ -218,7 +199,13 @@ public class Burocrata {
         return temAcademico && temAdministrativo;
     }
     
-    /** Verifica se os atestados têm a mesma categoria. */
+    /**
+     * Verifica se atestados possuem a mesma categoria.
+     *
+     * @param processo processo a ser verificado
+     * @param documento documento a ser adicionado
+     * @return (@Code true se todas as categorias coincidem, (@Code false) caso contrário
+     */
     private static boolean atestadoDeMesmaCategoria(Processo processo, Documento documento) {
         if (documento.getClass() == Atestado.class) {
             Atestado ate1 = (Atestado) documento;
@@ -235,7 +222,13 @@ public class Burocrata {
         return true;
     }
     
-    /** Verifica se o diploma é válido no processo. */
+    /**
+     * Verifica se o Diploma é válido no processo.
+     *
+     * @param processo processo a ser verificado
+     * @param documento documento a ser adicionado
+     * @return (@Code true se o diploma pode ser adicionado, (@Code false) caso contrário
+     */
     private static boolean validarDiploma(Processo processo, Documento documento) {
         if (documento.getClass() == Diploma.class) {
             for (Documento doc : processo.pegarCopiaDoProcesso()) {
@@ -247,7 +240,13 @@ public class Burocrata {
         return true;
     }
     
-    /** Verifica se portarias e editais são válidos. */
+    /**
+     * Verifica se portarias e editais são válidos.
+     *
+     * @param processo processo a ser verificado
+     * @param doc documento a ser adicionado
+     * @return (@Code true) se válidos, (@Code false) caso contrário
+     */
     private static boolean validarPortariaEEdital(Processo processo, Documento doc) {
         if ((doc instanceof Norma) && doc.getClass() != Norma.class) {
             Norma norma = (Norma) doc;
@@ -260,7 +259,13 @@ public class Burocrata {
         }
         return true;
     }
-    /** Verifica se os destinatários de circulares e ofícios são compatíveis. */
+    /**
+     * Verifica compatibilidade dos destinatários de circulares e ofícios.
+     *
+     * @param processo processo a ser verificado
+     * @param documento documento a ser adicionado
+     * @return (@Code true) se todos os destinatários são compatíveis, (@Code false) caso contrário
+     */
     private static boolean validarDestinatarios(Processo processo, Documento documento) {
         if ((documento instanceof Deliberacao) && documento.getClass() != Deliberacao.class) {
             String[] dest;
@@ -312,7 +317,12 @@ public class Burocrata {
 
     }
     
-    /** Verifica se o processo contém apenas um documento substancial e válido. */
+    /**
+     * Verifica se o processo contém apenas um documento substancial válido (Norma).
+     *
+     * @param processo processo a ser verificado
+     * @return (@Code true) se o processo contém apenas uma Norma válida, (@Code false) caso contrário
+     */
     private static boolean contemApenasSubstancialValido(Processo processo){
         Documento[] docs = processo.pegarCopiaDoProcesso();
         if(docs.length == 1){
