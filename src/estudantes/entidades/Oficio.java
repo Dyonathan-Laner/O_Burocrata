@@ -28,7 +28,7 @@ public class Oficio extends Deliberacao {
     /**
      * Retorna o destinatário do ofício.
      *
-     * @return destinatário
+     * @return o nome do destinatário
      */
     public String getDestinatario(){
         return destinatario;
@@ -37,7 +37,7 @@ public class Oficio extends Deliberacao {
      * Compara este ofício com outro objeto para verificar se são iguais.
      *
      * @param obj objeto a ser comparado
-     * @return true se os objetos forem iguais, false caso contrário
+     * @return {@code true} se os objetos são equivalentes, {@code false} caso contrário
      */
     @Override
     public boolean equals(Object obj) {
@@ -60,7 +60,7 @@ public class Oficio extends Deliberacao {
     /**
      * Retorna o hashCode do ofício.
      *
-     * @return valor hash do ofício
+     * @return o valor do hashCode
      */
     @Override
     public int hashCode() {

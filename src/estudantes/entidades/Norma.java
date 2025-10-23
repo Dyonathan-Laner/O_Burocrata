@@ -18,12 +18,12 @@ public class Norma extends DocumentoAdministrativo {
     /**
      * Construtor da classe Norma.
      *
-     * @param criador criador da norma
-     * @param codigoCurso código do curso relacionado
-     * @param paginas número de páginas da norma
-     * @param numero número da norma
-     * @param valido indica se a norma é válida
-     * @param texto conteúdo da norma
+     * @param criador o nome do criador da norma
+     * @param codigoCurso o código do curso associado
+     * @param paginas o número de páginas do documento
+     * @param numero o número identificador da norma
+     * @param valido indica se a norma está válida
+     * @param texto o conteúdo textual da norma
      */
     public Norma(String criador, CodigoCurso codigoCurso, int paginas, int numero, boolean valido, String texto){
         super(criador, codigoCurso, paginas);
@@ -35,7 +35,7 @@ public class Norma extends DocumentoAdministrativo {
     /**
      * Retorna o número da norma.
      *
-     * @return número da norma
+     * @return o número identificador
      */
     public int getNumero() {
         return numero;
@@ -43,7 +43,7 @@ public class Norma extends DocumentoAdministrativo {
     /**
      * Retorna se a norma é válida.
      *
-     * @return true se válida, false caso contrário
+     * @return {@code true} se a norma está válida, {@code false} caso contrário
      */
     public boolean getValido() {
         return valido;
@@ -51,7 +51,7 @@ public class Norma extends DocumentoAdministrativo {
     /**
      * Retorna o texto da norma.
      *
-     * @return texto da norma
+     * @return o texto da norma
      */
     public String getTexto() {
         return texto;
@@ -60,7 +60,7 @@ public class Norma extends DocumentoAdministrativo {
      * Compara esta norma com outro objeto para verificar se são iguais.
      *
      * @param obj objeto a ser comparado
-     * @return true se os objetos forem iguais, false caso contrário
+     * @return {@code true} se os objetos são equivalentes, {@code false} caso contrário
      */
     @Override
     public boolean equals(Object obj) {
@@ -84,7 +84,7 @@ public class Norma extends DocumentoAdministrativo {
     /**
      * Retorna o hashCode da norma.
      *
-     * @return valor hash da norma
+     * @return o valor do hashCode
      */
     @Override
     public int hashCode() {

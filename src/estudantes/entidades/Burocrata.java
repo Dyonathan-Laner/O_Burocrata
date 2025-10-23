@@ -24,8 +24,8 @@ public class Burocrata {
     /**
      * Construtor de Burocrata.
      *
-     * @param m mesa com os processos
-     * @param u universidade com os montes dos cursos e a secretaria
+     * @param mesa mesa com os processos
+     * @param universidade universidade com os montes dos cursos e a secretaria
      */
     public Burocrata(Mesa mesa, Universidade universidade) {
         this.mesa = mesa;

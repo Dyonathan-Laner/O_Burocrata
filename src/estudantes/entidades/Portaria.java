@@ -38,7 +38,7 @@ public class Portaria extends Norma {
      * Compara esta portaria com outro objeto para verificar se são iguais.
      *
      * @param obj objeto a ser comparado
-     * @return true se os objetos forem iguais, false caso contrário
+     * @return {@code true} se os objetos são equivalentes, {@code false} caso contrário
      */
     @Override
     public boolean equals(Object obj) {

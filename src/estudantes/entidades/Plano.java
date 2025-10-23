@@ -33,7 +33,7 @@ public class Plano extends DocumentoAcademico {
     /**
      * Retorna o responsável pelo plano.
      *
-     * @return responsável
+     * @return o nome do responsável
      */
     public String getResponsavel() {
         return responsavel;
@@ -41,7 +41,7 @@ public class Plano extends DocumentoAcademico {
     /**
      * Retorna o planejamento do plano.
      *
-     * @return array de planejamento
+     * @return um array de strings contendo o planejamento
      */
     public String[] getPlanejamento() {
         return planejamento;
@@ -50,7 +50,7 @@ public class Plano extends DocumentoAcademico {
     * Compara este plano com outro objeto para verificar se são iguais.
     *
     * @param obj objeto a ser comparado
-    * @return true se os objetos forem iguais, false caso contrário
+    * @return {@code true} se os objetos são equivalentes, {@code false} caso contrário
     */
     @Override
     public boolean equals(Object obj) {
