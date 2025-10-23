@@ -119,7 +119,7 @@ public class Burocrata {
         *
         * @param processo o processo que receberia o documento
         * @param documento o documento a ser verificado
-        * @return (@Code true se haveria mistura de Graduação e Pós-Graduação, false caso contrário
+        * @return (@Code true) se haveria mistura de Graduação e Pós-Graduação, (@Codefalse) caso contrário
         */
         for (Documento doc : processo.pegarCopiaDoProcesso()) {
             if (doc.getCodigoCurso().equals(CodigoCurso.POS_GRADUACAO_ENGENHARIA_SOFTWARE)
@@ -163,7 +163,7 @@ public class Burocrata {
      * Verifica se o processo contém apenas documentos do tipo Ata.
      *
      * @param processo processo a ser verificado
-     * @return (@Code true se contém apenas Atas, (@Code false) caso contrário
+     * @return (@Code true) se contém apenas Atas, (@Code false) caso contrário
      */
     public static boolean contemApenasAta(Processo processo) {
         for (Documento doc : processo.pegarCopiaDoProcesso()) {
@@ -178,7 +178,7 @@ public class Burocrata {
      *
      * @param processo processo a ser verificado
      * @param documento documento a ser adicionado
-     * @return (@Code true se houver mistura, (@Code false) caso contrário
+     * @return (@Code true) se houver mistura, (@Code false) caso contrário
      */
     public static boolean contemAdministrativoEAcademico(Processo processo, Documento documento) {
         boolean temAdministrativo = false;
@@ -204,7 +204,7 @@ public class Burocrata {
      *
      * @param processo processo a ser verificado
      * @param documento documento a ser adicionado
-     * @return (@Code true se todas as categorias coincidem, (@Code false) caso contrário
+     * @return (@Code true) se todas as categorias coincidem, (@Code false) caso contrário
      */
     public static boolean atestadoDeMesmaCategoria(Processo processo, Documento documento) {
         if (documento.getClass() == Atestado.class) {
@@ -227,7 +227,7 @@ public class Burocrata {
      *
      * @param processo processo a ser verificado
      * @param documento documento a ser adicionado
-     * @return (@Code true se o diploma pode ser adicionado, (@Code false) caso contrário
+     * @return (@Code true) se o diploma pode ser adicionado, (@Code false) caso contrário
      */
     public static boolean validarDiploma(Processo processo, Documento documento) {
         if (documento.getClass() == Diploma.class) {
