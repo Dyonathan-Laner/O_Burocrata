@@ -30,7 +30,11 @@ public class Certificado extends Registro {
     public String getDescricao(){
         return descricao;
     }
-    /** Compara dois certificados verificando se possuem os mesmos dados. */
+    /** Compara o objeto passado é igual a esse certificado.
+    *
+     * @param obj objeto a ser comparado
+     * @return true se os documentos forem iguais, false caso contrário
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {

@@ -28,7 +28,11 @@ public class Atestado extends Registro {
     public String getCategoria() {
         return categoria;
     }
-    /** Compara se dois atestados são iguais. */
+    /** Compara se o objeto passado é igual a esse atestado.
+     *
+     * @param obj objeto a ser comparado
+     * @return true se os documentos forem iguais, false caso contrário
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {

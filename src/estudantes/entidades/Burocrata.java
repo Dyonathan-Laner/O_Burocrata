@@ -109,7 +109,7 @@ public class Burocrata {
      * Retorna false se Caso o Documento for adicionado no Processo, ele terá
      * Graduação junto com pós.
      */
-    private static boolean contemGraduacaoEPos(Processo processo, Documento documento) {
+    public static boolean contemGraduacaoEPos(Processo processo, Documento documento) {
         boolean temGraduacao = false;
         boolean temPos = false;
 
@@ -165,7 +165,7 @@ public class Burocrata {
      * @param processo processo a ser verificado
      * @return (@Code true se contém apenas Atas, (@Code false) caso contrário
      */
-    private static boolean contemApenasAta(Processo processo) {
+    public static boolean contemApenasAta(Processo processo) {
         for (Documento doc : processo.pegarCopiaDoProcesso()) {
             if (doc.getClass() != Ata.class) {
                 return false;
@@ -180,7 +180,7 @@ public class Burocrata {
      * @param documento documento a ser adicionado
      * @return (@Code true se houver mistura, (@Code false) caso contrário
      */
-    private static boolean contemAdministrativoEAcademico(Processo processo, Documento documento) {
+    public static boolean contemAdministrativoEAcademico(Processo processo, Documento documento) {
         boolean temAdministrativo = false;
         boolean temAcademico = false;
 
@@ -206,7 +206,7 @@ public class Burocrata {
      * @param documento documento a ser adicionado
      * @return (@Code true se todas as categorias coincidem, (@Code false) caso contrário
      */
-    private static boolean atestadoDeMesmaCategoria(Processo processo, Documento documento) {
+    public static boolean atestadoDeMesmaCategoria(Processo processo, Documento documento) {
         if (documento.getClass() == Atestado.class) {
             Atestado ate1 = (Atestado) documento;
             for (Documento doc : processo.pegarCopiaDoProcesso()) {
@@ -229,7 +229,7 @@ public class Burocrata {
      * @param documento documento a ser adicionado
      * @return (@Code true se o diploma pode ser adicionado, (@Code false) caso contrário
      */
-    private static boolean validarDiploma(Processo processo, Documento documento) {
+    public static boolean validarDiploma(Processo processo, Documento documento) {
         if (documento.getClass() == Diploma.class) {
             for (Documento doc : processo.pegarCopiaDoProcesso()) {
                 if (!(doc instanceof Certificado) && doc.getClass() != Ata.class) {
@@ -247,7 +247,7 @@ public class Burocrata {
      * @param doc documento a ser adicionado
      * @return (@Code true) se válidos, (@Code false) caso contrário
      */
-    private static boolean validarPortariaEEdital(Processo processo, Documento doc) {
+    public static boolean validarPortariaEEdital(Processo processo, Documento doc) {
         if ((doc instanceof Norma) && doc.getClass() != Norma.class) {
             Norma norma = (Norma) doc;
             if (norma.getValido() && norma.getPaginas() >= 100) {
@@ -266,7 +266,7 @@ public class Burocrata {
      * @param documento documento a ser adicionado
      * @return (@Code true) se todos os destinatários são compatíveis, (@Code false) caso contrário
      */
-    private static boolean validarDestinatarios(Processo processo, Documento documento) {
+    public static boolean validarDestinatarios(Processo processo, Documento documento) {
         if ((documento instanceof Deliberacao) && documento.getClass() != Deliberacao.class) {
             String[] dest;
             if (documento.getClass() == Circular.class) {
@@ -323,7 +323,7 @@ public class Burocrata {
      * @param processo processo a ser verificado
      * @return (@Code true) se o processo contém apenas uma Norma válida, (@Code false) caso contrário
      */
-    private static boolean contemApenasSubstancialValido(Processo processo){
+    public static boolean contemApenasSubstancialValido(Processo processo){
         Documento[] docs = processo.pegarCopiaDoProcesso();
         if(docs.length == 1){
             Documento doc = docs[0];
